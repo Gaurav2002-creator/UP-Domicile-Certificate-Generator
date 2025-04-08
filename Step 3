@@ -1,0 +1,33 @@
+document.getElementById('certificateForm').addEventListener('submit', function(event) {
+    event.preventDefault();
+
+    const name = document.getElementById('name').value;
+    const fatherName = document.getElementById('fatherName').value;
+    const dob = document.getElementById('dob').value;
+    const district = document.getElementById('district').value;
+    const photo = document.getElementById('photo').files[0];
+
+    if (photo) {
+        const reader = new FileReader();
+        reader.onload = function(e) {
+            generateCertificate(name, fatherName, dob, district, e.target.result);
+        };
+        reader.readAsDataURL(photo);
+    } else {
+        generateCertificate(name, fatherName, dob, district, null);
+    }
+});
+
+function generateCertificate(name, fatherName, dob, district, photoData) {
+    const certificateHTML = `
+        <div style="border: 10px solid #787878; padding: 20px; width: 600px; text-align: center; background-color: #fff;">
+            <h2 style="margin: 0;">उत्तर प्रदेश सरकार</h2>
+            <h3 style="margin: 0;">GOVERNMENT OF UTTAR PRADESH</h3>
+            <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/2/2d/Emblem_of_Uttar_Pradesh.svg/1200px-Emblem_of_Uttar_Pradesh.svg.png" alt="UP Government Logo" style="width: 100px; margin: 20px 0;">
+            <h3 style="margin: 0;">डोमिसाइल प्रमाणपत्र</h3>
+            <p>यह प्रमाणित किया जाता है कि श्री/श्रीमती <strong>${name}</strong>, पिता का नाम <strong>${fatherName}</strong>, जन्म तिथि <strong>${dob}</strong>, निवासी <strong>${district}</strong> जिले के स्थायी निवासी हैं।</p>
+            ${photoData ? `<img src="${photoData}" alt="Applicant Photo" style="width: 100px; height: 100px; border: 1px solid #000;">` : ''}
+            <p style="margin-top: 30px;">तारीख: ${new Date().toLocaleDateString()}</p>
+            <p style="margin-top: 50px;">_________________________<br>अधिकारी का नाम एवं पद</p>
+        </div>
+   
